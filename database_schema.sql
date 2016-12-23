@@ -21,20 +21,18 @@ CREATE TABLE IF NOT EXISTS `bookmark_accounts` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `display_name` varchar(255) NOT NULL,
-  `vanity_name` varchar(255) NOT NULL,
   `snowflake` int(11) NOT NULL,
   `verified` bit(1) NOT NULL DEFAULT b'0',
-  `type` int(11) NOT NULL,
+  `account_type` int(11) NOT NULL,
   `timezone` varchar(100) NOT NULL DEFAULT 'N/A',
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `last_updated` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `is_active` bit(1) DEFAULT b'1',
-  `last_ip` varchar(100) NOT NULL DEFAULT '0',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `is_active` bit(1) NOT NULL DEFAULT b'1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `snowflake` (`snowflake`),
-  KEY `FK_bookmark_accounts_bookmark_account_types` (`type`),
-  CONSTRAINT `FK_bookmark_accounts_bookmark_account_types` FOREIGN KEY (`type`) REFERENCES `bookmark_account_types` (`id`)
+  KEY `FK_bookmark_accounts_bookmark_account_types` (`account_type`),
+  CONSTRAINT `FK_bookmark_accounts_bookmark_account_types` FOREIGN KEY (`account_type`) REFERENCES `bookmark_account_types` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
@@ -194,12 +192,29 @@ CREATE TABLE IF NOT EXISTS `bookmark_group_members` (
 -- Data exporting was unselected.
 
 
+-- Dumping structure for table bookmark.bookmark_instances
+CREATE TABLE IF NOT EXISTS `bookmark_instances` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `instance_id` varchar(50) NOT NULL,
+  `instance_name` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `instance_id` (`instance_id`),
+  UNIQUE KEY `instance_name` (`instance_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+
+
 -- Dumping structure for table bookmark.bookmark_nonces
 CREATE TABLE IF NOT EXISTS `bookmark_nonces` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nonce` varchar(100) NOT NULL,
-  `origin` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
+  `origin` varchar(50) NOT NULL,
+  `expires` datetime NOT NULL,
+  `is_active` bit(1) NOT NULL DEFAULT b'1',
+  PRIMARY KEY (`id`),
+  KEY `FK_bookmark_nonces_bookmark_instances` (`origin`),
+  CONSTRAINT `FK_bookmark_nonces_bookmark_instances` FOREIGN KEY (`origin`) REFERENCES `bookmark_instances` (`instance_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
@@ -262,6 +277,8 @@ CREATE TABLE IF NOT EXISTS `bookmark_sessions` (
   `account_id` int(11) NOT NULL,
   `session_key` varchar(255) NOT NULL,
   `ip_address` varchar(100) NOT NULL,
+  `last_use` datetime NOT NULL,
+  `is_active` bit(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_bookmark_sessions_bookmark_accounts` (`account_id`),
   CONSTRAINT `FK_bookmark_sessions_bookmark_accounts` FOREIGN KEY (`account_id`) REFERENCES `bookmark_accounts` (`id`)
