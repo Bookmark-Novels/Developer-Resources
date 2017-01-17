@@ -1,4 +1,4 @@
-Small application to automatically generate a resource dependency dictionary for use by Ein.
+Small application to automatically generate a resource dependency dictionary for use by Ein. The dictionary is a mapping from dependence to dependent.
 
 ## Example
 
