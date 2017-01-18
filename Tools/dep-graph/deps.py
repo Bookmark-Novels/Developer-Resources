@@ -6,7 +6,7 @@ story = Resource('story', specify=True)
 bookmark.depends(story)
 
 toc = Resource('toc')
-story.depends(toc)
+story.child(toc)
 
 chapter = Resource('chapter', specify=True)
 chapter_title = Resource('title')
@@ -17,5 +17,12 @@ chapter.depends(chapter_title)
 chapter.depends(chapter_content)
 chapter.depends(chapter_author)
 
-story.depends(chapter)
-toc.depends(chapter)
+chapter.child(chapter_title)
+chapter.child(chapter_content)
+chapter.child(chapter_author)
+
+story.child(chapter)
+toc.depends(chapter_title)
+
+bookmark.depends(toc)
+bookmark.depends(chapter)
