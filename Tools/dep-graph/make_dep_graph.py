@@ -1,4 +1,3 @@
-import json
 import sys
 
 from lang.python import python
@@ -22,4 +21,4 @@ if sys.argv[1] not in fn:
     print('Specified language is not supported.')
     sys.exit(0)
 
-print(json.dumps(fn[sys.argv[1]]()))
+print(fn[sys.argv[1]]())

@@ -1,31 +1,7 @@
-from deps import bookmark
+import json
 
-def _apply_py_(parent, resource):
-    obj = {}
-
-    this = parent + '.' + resource.name
-
-    if resource.specify:
-        this += '.*'
-
-    for r in resource.deps:
-        rkey = this + '.' + r.name
-
-        if r.specify:
-            rkey += '.*'
-
-        obj[rkey] = this
-
-    for r in resource.deps:
-        subdeps = _apply_py_(this, r)
-        obj.update(subdeps)
-
-    return obj
+from mapper import make_map
 
 def python():
-    obj = {}
-    
-    for r in bookmark.deps:
-        obj.update(_apply_py_('bookmark', r))
-
-    return obj
+    obj = make_map()
+    return 'bookmark_deps = ' + json.dumps(obj, indent=4, sort_keys=True)

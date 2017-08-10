@@ -1,4 +1,4 @@
 from .python import python
 
 def js():
-    return python()
+    return 'let bookmark_deps = ' + python() + ';'
