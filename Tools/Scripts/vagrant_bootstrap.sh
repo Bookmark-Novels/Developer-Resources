@@ -12,3 +12,7 @@ chown vagrant: ~vagrant/.zshrc
 
 wget --quiet https://raw.githubusercontent.com/Bookmark-Novels/Resources/master/Configuration%20Files/.zshrc -O ~vagrant/.zshrc
 chsh -s /bin/zsh vagrant
+
+# http://foo-o-rama.com/vagrant--stdin-is-not-a-tty--fix.html#
+s.privileged = false
+s.inline = "sudo sed -i '/tty/!s/mesg n/tty -s \\&\\& mesg n/' /root/.profile"
