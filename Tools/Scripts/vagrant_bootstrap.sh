@@ -18,4 +18,4 @@ s.privileged = false
 s.inline = "sudo sed -i '/tty/!s/mesg n/tty -s \\&\\& mesg n/' /root/.profile"
 
 latest_provision_script=$(curl -s https://raw.githubusercontent.com/Bookmark-Novels/Resources/master/Tools/Scripts/vagrant_bootstrap.sh | md5sum | awk '{print $1}')
-echo latest_provision_script > ~vagrant/.bookmark_global_vagrant
+echo $latest_provision_script > ~vagrant/.bookmark_global_vagrant
